@@ -1,45 +1,104 @@
 #include "RCSwitch.h"
 
-RCSwitch emissor = RCSwitch();
+RCSwitch emissor  = RCSwitch();
 RCSwitch receptor = RCSwitch();
 
-void setup() {
-  // para os prints vamos configurar o serial
-  Serial.begin(9600);
-  //para conf o emissor e receptor vc só precisa conf os pinos
-  //o 4 é o pino que está conectado os dados
-  emissor.enableTransmit(4);
-  //o receptor é ligado ao pino de dados só que 
-  //é um tipo de pino especial que permite acesso a ele atravez
-  //de interrupções ex, qdo vc pressiona o teclado há uma interrupção
-  //aqui o receptor vai ser "acordado" informando q recebeu algo
-  //para cada tipo de arduion no uno o pino de interrupção é o 2 e o 3
-  //a ligação errada é para ligar no pino 2
-  //esse 0 é pq quer pegar o primeiro pino de interrupção
-  receptor.enableReceive(0);
-  
-  
+#define RFID 12345
+#define DESLOCAMENTO_RFID  17
+#define DESLOCAMENTO_CHORO 16
+#define DESLOCAMENTO_BATMT 8
 
+void setup() {
+  Serial.begin(9600);
+  
+  emissor.enableTransmit(4);
+  receptor.enableReceive(0);
+}
+
+long simularSensoresRF(long chorando, long batimentos, 
+  long temperatura) {
+  
+  long rf = RFID;
+  long info = rf << DESLOCAMENTO_RFID;
+  info = info | (chorando << DESLOCAMENTO_CHORO);
+  info = info | (batimentos << DESLOCAMENTO_BATMT);
+  info = info | temperatura;
+  
+  return info;  
+}
+
+boolean RFIDValido(long info) {
+  boolean valido = false;
+  
+  int rfid = info >> DESLOCAMENTO_RFID;
+  if (rfid == RFID) {
+     valido = true; 
+  }
+
+  return valido;  
+}
+
+void emitir(long info) {
+  emissor.send(info, 32);  
+}
+
+long receber() {
+  long info = -1;
+  
+  if (receptor.available()) {
+    info = receptor.getReceivedValue();
+    
+    receptor.resetAvailable();    
+  }
+  
+  return info;
+}
+
+boolean extrairChoro(long info) {
+  int choro = (info & 65536) >> DESLOCAMENTO_CHORO;
+   
+  return (choro == 1);
+}
+
+int extrairBatimentos(long info) {
+  int batimentos = (info & 65280) >> DESLOCAMENTO_BATMT;
+  
+  return batimentos;
+}
+
+int extrairTemperatura(long info) {
+  int temperatura = (info & 255);
+
+  return temperatura;  
 }
 
 void loop() {
-  //valor para transmitir
-  long valorEmissao = 1234;
-  //aceite que é 24
-  emissor.send(valorEmissao, 24);
-  delay(50);//para visualizar a transmissão dos dados
-
-  //recepção de dados
-  //primeiro identificar se recebeu algo, se tem dados disponíveis
-  if(receptor.available()){
-    long valorRecebido = receptor.getReceivedValue();
-    //vamos imprimir
-    Serial.print("Recebido o valor: ");
-    Serial.println(valorRecebido);
-    //tem q zerar o buffer para nao dar falso positivo
-    receptor.resetAvailable();
-  }
+  // EMISSAO DE DADOS
+  long info = simularSensoresRF(0, 100, 35); 
+  emitir(info);
+    
+  delay(50);
   
-
-
+  // RECEPCAO DE DADOS
+  info = receber();
+  
+  if (info != -1) {
+    if (RFIDValido(info)) {
+      boolean chorando = extrairChoro(info);
+      if (chorando) {
+        Serial.println("Avemarilson estah chorando!");  
+      }
+      int batimentos = extrairBatimentos(info);
+      Serial.print("O coracao de Avemarilson estah batendo a ");
+      Serial.print(batimentos);
+      Serial.println(" bpm");
+      
+      int temperatura = extrairTemperatura(info);
+      Serial.print("A temperatura de Avemarilson eh ");
+      Serial.print(temperatura);
+      Serial.println(" graus celsius");
+    }
+  }
 }
+
+
