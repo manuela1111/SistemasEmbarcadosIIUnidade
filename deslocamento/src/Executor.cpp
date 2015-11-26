@@ -2,7 +2,7 @@
  * Executor.cpp
  *
  *  Created on: 29 de out de 2015
- *      Author: manuela
+ *      Author: Manuela e Cremildo
  */
 #include <stdlib.h>
 #include <iostream>
@@ -16,16 +16,16 @@ int main (int argc, char** argv){
 	int pressaoDiastolica = 12;
 	int batimentos = 100;
 
-	//o int do c++ é o long do arduino
+	//o int do c++ Ã© o long do arduino
 	int info = 0;
 
-	//o sizeof do int é 4 bytes
+	//o sizeof do int Ã© 4 bytes
 	cout <<"tam = "<<sizeof(info)<<endl;
 
-	//esse | não é de condicional é de operação binária entre o info e cada um
+	//esse | nÃ£o Ã© de condicional Ã© de operaÃ§Ã£o binÃ¡ria entre o info e cada um
 	//int info             00000000 00000000 00000000 00000000
-	//temp é 36 em binário 00100100 preenche com os zeros
-	//o próximo deslocamento é 16
+	//temp Ã© 36 em binÃ¡rio 00100100 preenche com os zeros
+	//o prÃ³ximo deslocamento Ã© 16
 	//pressao Sistolica             00001000
 
 	info = info | (temperatura << 24);
@@ -35,22 +35,22 @@ int main (int argc, char** argv){
 
 	cout <<"info = "<<info<<endl;
 
-	//informação enviada pelo RF Transmissor
+	//informaÃ§Ã£o enviada pelo RF Transmissor
 
-	//vamos recuperar as informações usando o & lógico
+	//vamos recuperar as informaÃ§Ãµes usando o & lÃ³gico
 	//4278190000 equivale a 11111111 00000000 00000000 00000000
 	//16711680 equivale
 	int temperaturaRec = (info & 4278190000)>>24;
-	//para pegar a pressão sistolica desloca o 1111111 para a direita
+	//para pegar a pressÃ£o sistolica desloca o 1111111 para a direita
 	int pressaoSistolicaRec = (info & 16711680)>>16;
 	int pressaoDiastolicaRec = (info & 65280)>>8;
 	int batimentosRec = (info & 255);
 
 	//teste
 
-	//informação decodifcada pelo receptor
+	//informaÃ§Ã£o decodifcada pelo receptor
 	cout <<"Temperatura = "<<temperaturaRec<<endl;
-	cout <<" Pressão Sistólica = "<<pressaoSistolicaRec<<endl;
-	cout <<"Pressão Diastólica = "<<pressaoDiastolicaRec<<endl;
+	cout <<" PressÃ£o SistÃ³lica = "<<pressaoSistolicaRec<<endl;
+	cout <<"PressÃ£o DiastÃ³lica = "<<pressaoDiastolicaRec<<endl;
 	cout <<"Batimentos = "<<batimentosRec<<endl;
 }
