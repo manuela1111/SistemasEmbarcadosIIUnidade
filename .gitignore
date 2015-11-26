@@ -9,11 +9,11 @@ JavaApp/.project
 JavaApp/log/
 
 #Arquivos/Diretorios C++
-comunicacaosensores/.settings/
-comunicacaosensores/Debug/
-comunicacaosensores/Release/
-comunicacaosensores/.project
-comunicacaosensores/.cproject
+deslocamento/.settings/
+deslocamento/Debug/
+deslocamento/Release/
+deslocamento/.project
+deslocamento/.cproject
 
 #Arquivos/Diretorios Arduino
 
