@@ -46,18 +46,11 @@ int main (int argc, char** argv){
 	int pressaoDiastolicaRec = (info & 65280)>>8;
 	int batimentosRec = (info & 255);
 
+	//teste
+
 	//informação decodifcada pelo receptor
 	cout <<"Temperatura = "<<temperaturaRec<<endl;
 	cout <<" Pressão Sistólica = "<<pressaoSistolicaRec<<endl;
 	cout <<"Pressão Diastólica = "<<pressaoDiastolicaRec<<endl;
 	cout <<"Batimentos = "<<batimentosRec<<endl;
 }
-
-
-
-
-
-
-
-
-

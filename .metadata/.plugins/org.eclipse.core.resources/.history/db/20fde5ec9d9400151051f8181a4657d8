@@ -1,0 +1,28 @@
+/*
+ * executor.cpp
+
+
+ *
+ *  Created on: 26 de nov de 2015
+ *      Author: manuela
+ */
+
+#include <iostream>
+#include "Comunicacao.h"
+
+using namespace std;
+
+int main(char **argv, int argc){
+
+	//criar uma instancia da classe de comunicação
+	#ifdef __linux__
+		Comunicacao com = Comunicacao("/dev/ttyACM0");
+	#endif
+	#ifdef _WIN32 || _WIN64
+		Comunicacao com = Comunicacao("COM6");
+	#endif
+
+	return 0;
+}
+
+

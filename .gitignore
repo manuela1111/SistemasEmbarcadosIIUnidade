@@ -40,3 +40,5 @@
 .metadata/version.ini
 *.project
 .metadata/.plugins/org.eclipse.core.resources/.history/59/40c36a64149100151da7ceb35eac6181
+*.xml
+.metadata/.plugins/org.eclipse.core.resources/.history/14/903c3096a09400151051f8181a4657d8
