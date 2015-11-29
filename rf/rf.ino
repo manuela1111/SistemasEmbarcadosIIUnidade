@@ -22,7 +22,7 @@ struct InfoRF{
   int id;
   int batimentos;
   int temperatura;
-  boolean movimento;
+  int movimento;
 }infoRF;
 
  
@@ -67,7 +67,8 @@ long lerSensoresRF() {
   //no anologRead vai passar o pino do potenciômetro
   long batimentos = analogRead(PINO_BATIMENTOS);
   long temperatura= batimentos; //analogRead(PINO_TEMPERATURA);
-  long movimento= 0;
+  //long movimento= 0; estava sem sensor 
+  long movimento;
 
   batimentos = map(batimentos, 0, 1023, 0, 200);
   temperatura = map(temperatura, 0, 1023, 0, 40);
@@ -108,7 +109,7 @@ void enviarParaUSB(){
 
   Serial.write("I");
   Serial.write((uint8_t*)&buff, sizeof(InfoRF));
-  //Serial.write("T");
+  Serial.write("T");
   
   
 }
@@ -128,7 +129,7 @@ long receber() {
   return info;
 }
 
-boolean extrairMovimento(long info) {
+int extrairMovimento(long info) {
   int movimento = (info & 65536) >> DESLOCAMENTO_MOVMT;
    
   return (movimento == 1);
