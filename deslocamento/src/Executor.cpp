@@ -2,7 +2,7 @@
  * Executor.cpp
  *
  *  Created on: 29 de out de 2015
- *      Author: manuela
+ *      Author: Manuela e Cremildo
  */
 #include <stdlib.h>
 #include <iostream>
@@ -46,18 +46,11 @@ int main (int argc, char** argv){
 	int pressaoDiastolicaRec = (info & 65280)>>8;
 	int batimentosRec = (info & 255);
 
+	//teste
+
 	//informação decodifcada pelo receptor
 	cout <<"Temperatura = "<<temperaturaRec<<endl;
 	cout <<" Pressão Sistólica = "<<pressaoSistolicaRec<<endl;
 	cout <<"Pressão Diastólica = "<<pressaoDiastolicaRec<<endl;
 	cout <<"Batimentos = "<<batimentosRec<<endl;
 }
-
-
-
-
-
-
-
-
-
