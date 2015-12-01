@@ -1,6 +1,0 @@
-#
-#Thu Nov 26 21:49:37 GMT-03:00 2015
-Release/comunicacaorf.exe=1
-include/comunicacao.h=1
-Release/src/executor.o=1
-src/executor.cpp=1
