@@ -1,6 +1,6 @@
 #Outros diretórios
 .metadata/
-
+RemoteSystemsTempFiles/
 
 #Arquivos/Diretorios C++
 pocoEscuro/.settings/
@@ -8,6 +8,7 @@ pocoEscuro/Debug/
 pocoEscuro/Release/
 pocoEscuro/.project
 pocoEscuro/.cproject
+
 
 #Arquivos/Diretorios Arduino
 
