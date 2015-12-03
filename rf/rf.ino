@@ -59,6 +59,8 @@ void setup() {
   acel.setInterrupt(ADXL345_INT_ACTIVITY_BIT,1);
   acel.setInterrupt(ADXL345_INT_INACTIVITY_BIT,1);
 
+  //acel.getInterruptSource();
+
   
 }
 //tirou os parâmetros pq já vai pegar direto dos sensores
@@ -67,8 +69,7 @@ long lerSensoresRF() {
   //no anologRead vai passar o pino do potenciômetro
   long batimentos = analogRead(PINO_BATIMENTOS);
   long temperatura= batimentos; //analogRead(PINO_TEMPERATURA);
-  //long movimento= 0; estava sem sensor 
-  long movimento;
+  long movimento = 0;
 
   batimentos = map(batimentos, 0, 1023, 0, 200);
   temperatura = map(temperatura, 0, 1023, 0, 40);
