@@ -59,8 +59,7 @@ void setup() {
   acel.setInterrupt(ADXL345_INT_ACTIVITY_BIT,1);
   acel.setInterrupt(ADXL345_INT_INACTIVITY_BIT,1);
 
-  //acel.getInterruptSource();
-
+  
   
 }
 //tirou os parâmetros pq já vai pegar direto dos sensores
