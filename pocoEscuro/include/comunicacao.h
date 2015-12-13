@@ -13,7 +13,7 @@
 #define COMUNICACAO_H_
 
 #include <stdlib.h>
-#ifdef _WIN32 || _WIN64
+#if _WIN32 || _WIN64
 #include <windows.h>
 #endif
 
@@ -29,7 +29,7 @@ private:
 #ifdef __linux__
 	int hPorta;
 #endif
-#ifdef _WIN32 || _WIN64
+#if _WIN32 || _WIN64
 	HANDLE hPorta;
 #endif
 

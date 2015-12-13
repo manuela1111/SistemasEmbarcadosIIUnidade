@@ -9,6 +9,14 @@ pocoEscuro/Release/
 pocoEscuro/.project
 pocoEscuro/.cproject
 
+#Arquivos/Diretorios Java
+pocoescuroweb/.settings/
+pocoescuroweb/.build/
+pocoescuroweb/.project
+pocoescuroweb/.classpath
+pocoescuroweb/.gitignore
+pocoescuroweb/web/WEB-INF/lib/pocoEscuro.so
+pocoescuroweb/web/WEB-INF/lib/pocoEscuro.dll
 
 #Arquivos/Diretorios Arduino
 
