@@ -8,12 +8,12 @@ import br.edu.ifba.sispe.pocoescuro.Informacao;
 public class SingleConector {
 
 	private static IComunicacaoRF comRF = null;
-	private static final String PORTA = "COM6";
+	private static final String PORTA = "/dev/ttyACM0";
 	private static Informacao info;
 	
 	private static Semaphore semaforo;
 	
-	// vamos chamar a fábrica e ela precisa da localização da biblioteca
+	// vamos chamar a fï¿½brica e ela precisa da localizaï¿½ï¿½o da biblioteca
 	public static void iniciarComunicacaoRF(String libPath){
 		info = new Informacao();
 					comRF = FabricaConectores.getConector(libPath);
@@ -23,7 +23,7 @@ public class SingleConector {
 			dispensarPrimeirasLeituras();
 			semaforo = new Semaphore(1,true);
 		}else{
-			System.out.println("Não foi possível iniciar acesso a sensores.");
+			System.out.println("Nï¿½o foi possï¿½vel iniciar acesso a sensores.");
 		}
 		}
 	 public static void dispensarPrimeirasLeituras(){
@@ -33,7 +33,7 @@ public class SingleConector {
 			 comRF.getBatimentos() + "/ " + comRF.getTemperatura() + "/ " + comRF.getMovimento());
 			 
 			 try {
-				 //50 pq o arduino está com sleep de 50
+				 //50 pq o arduino estï¿½ com sleep de 50
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -59,7 +59,7 @@ public class SingleConector {
 		}
 		
 		public static Informacao getInformacao(){
-			//Cria o semáforo e seta todas as informações
+			//Cria o semï¿½foro e seta todas as informaï¿½ï¿½es
 			Informacao info = new Informacao();
 			try {
 				semaforo.acquire();

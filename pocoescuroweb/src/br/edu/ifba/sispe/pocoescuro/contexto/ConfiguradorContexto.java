@@ -19,7 +19,7 @@ public class ConfiguradorContexto extends ConfigureListener{
 		System.out.println("Iniciando o tomcat...");
 		ServletContext sc = sce.getServletContext();
 		
-		String libPath = sc.getRealPath("/WEB-INF/lib/");
+		String libPath = sc.getRealPath("/WEB-INF/lib");
 		System.out.println("libPath conf contexto: "+ libPath);
 		SingleConector.iniciarComunicacaoRF(libPath);
 		leitor = new LeitorAssincrono();
