@@ -11,7 +11,7 @@ pocoEscuro/.cproject
 
 #Arquivos/Diretorios Java
 pocoescuroweb/.settings/
-pocoescuroweb/.build/
+pocoescuroweb/build/
 pocoescuroweb/.project
 pocoescuroweb/.classpath
 pocoescuroweb/.gitignore

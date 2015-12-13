@@ -8,12 +8,12 @@
  */
 
 #include <iostream>
-#include "Comunicacao.h"
+#include "comunicacao.h"
 
 using namespace std;
 
 struct InfoRF {
-	short id; //o int do arduino é short
+	short id; //o int do arduino eh short
 	short batimentos;
 	short temperatura;
 	short movimento;
@@ -21,18 +21,16 @@ struct InfoRF {
 
 int main(char **argv, int argc) {
 
-	//criar uma instancia da classe de comunicação
-	//#ifdef __linux__
-	//	Comunicacao com = Comunicacao("/dev/ttyACM0");
-	//#endif
-	//#ifdef _WIN32 || _WIN64
-	//	Comunicacao com = Comunicacao("COM6");
-	//#endif
-
 	InfoRF info = { 0 };
 	char ai, at;
 
+	//criar uma instancia da classe de comunicacao
+#ifdef __linux__
+	Comunicacao com = Comunicacao("/dev/ttyACM0");
+#endif
+#ifdef _WIN32 || _WIN64
 	Comunicacao com = Comunicacao("COM6");
+#endif
 
 	com.iniciar();
 	//realizar a leitura do caracter "A" (Inicial)
@@ -40,7 +38,7 @@ int main(char **argv, int argc) {
 
 	resultado = com.ler((char*) &ai, sizeof(ai));
 
-	//coloca zero para todas as posições
+	//coloca zero para todas as posicoes
 	/*while(true){
 	 if(com.ler((char*)&info, sizeof(InfoRF)) == 0){
 	 cout <<"id = "<< info.id << endl;
