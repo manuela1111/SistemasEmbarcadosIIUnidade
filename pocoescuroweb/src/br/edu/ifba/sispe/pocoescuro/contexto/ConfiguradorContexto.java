@@ -1,10 +1,10 @@
-package br.edu.ifba.se.babycare.contexto;
+package br.edu.ifba.sispe.pocoescuro.contexto;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
-import br.edu.ifba.se.babycare.leitor.LeitorAssincrono;
 import br.edu.ifba.sispe.pocoescuro.conector.SingleConector;
+import br.edu.ifba.sispe.pocoescuro.leitor.LeitorAssincrono;
 
 import com.sun.faces.config.ConfigureListener;
 

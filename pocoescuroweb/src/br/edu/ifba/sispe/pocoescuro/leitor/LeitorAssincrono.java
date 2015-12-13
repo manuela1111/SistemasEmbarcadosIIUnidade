@@ -1,4 +1,4 @@
-package br.edu.ifba.se.babycare.leitor;
+package br.edu.ifba.sispe.pocoescuro.leitor;
 
 import java.util.concurrent.Semaphore;
 
