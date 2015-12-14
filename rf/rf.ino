@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include "RCSwitch.h"
 #include "ADXL345.h"
+#include "Adafruit_BMP085.h"
 
 //instâncias do emissor e do receptor
 RCSwitch emissor  = RCSwitch();
@@ -8,29 +9,36 @@ RCSwitch receptor = RCSwitch();
 
 //instância do acelerômetro
 ADXL345 acel = ADXL345();
+Adafruit_BMP085 bmp;
 
+#define RFID_PIN_TRANSMISSOR 4
+#define RFID_PIN_RECEPTOR 2
 #define RFID_LIMITE_INFERIOR 12345
 #define RFID_LIMITE_SUPERIOR 12355
 #define DESLOCAMENTO_RFID  17
 #define DESLOCAMENTO_MOVMT 16
-#define DESLOCAMENTO_BATMT 8
+#define DESLOCAMENTO_VELOC 8
 
-#define PINO_BATIMENTOS  0
-#define PINO_TEMPERATURA 1
+#define PINO_VELOCIDADE  0
 
 struct InfoRF{
   int id;
-  int batimentos;
-  int temperatura;
   int movimento;
+  int velocidade;
+  int altitude;
 }infoRF;
 
  
 void setup() {
   Serial.begin(9600);
 
+  if (!bmp.begin()) {
+    Serial.println("Não foi possível encontrar um sensor BMP085 válido.Por favor, verifique.");
+    while (1) {}
+  }
+  
   //Configuração do emissor receptor RF
-  emissor.enableTransmit(4);
+  emissor.enableTransmit(RFID_PIN_TRANSMISSOR);
   receptor.enableReceive(0);
 
   //Configuração do acelerômetro para detecção de movimento
@@ -59,19 +67,18 @@ void setup() {
   acel.setInterrupt(ADXL345_INT_ACTIVITY_BIT,1);
   acel.setInterrupt(ADXL345_INT_INACTIVITY_BIT,1);
 
-  
-  
 }
 //tirou os parâmetros pq já vai pegar direto dos sensores
 long lerSensoresRF() {
 
   //no anologRead vai passar o pino do potenciômetro
-  long batimentos = analogRead(PINO_BATIMENTOS);
-  long temperatura= batimentos; //analogRead(PINO_TEMPERATURA);
+  long velocidade = analogRead(PINO_VELOCIDADE);
+  long altitude = bmp.readAltitude();
   long movimento = 0;
+  
 
-  batimentos = map(batimentos, 0, 1023, 0, 200);
-  temperatura = map(temperatura, 0, 1023, 0, 40);
+  velocidade = map(velocidade, 0, 1023, 0, 100);
+  //altitude = map(altitude, 0, 1023, 0, 40);
 
   byte interrupAcel = acel.getInterruptSource();
 
@@ -82,8 +89,8 @@ long lerSensoresRF() {
   long rf = RFID_LIMITE_INFERIOR;
   long info = rf << DESLOCAMENTO_RFID;
   info = info | (movimento << DESLOCAMENTO_MOVMT);
-  info = info | (batimentos << DESLOCAMENTO_BATMT);
-  info = info | temperatura;
+  info = info | (velocidade << DESLOCAMENTO_VELOC);
+  info = info | altitude;
   
   return info;  
 }
@@ -135,23 +142,25 @@ int extrairMovimento(long info) {
   return (movimento == 1);
 }
 
-int extrairBatimentos(long info) {
-  int batimentos = (info & 65280) >> DESLOCAMENTO_BATMT;
+int extrairVelocidade(long info) {
+  int velocidade = (info & 65280) >> DESLOCAMENTO_VELOC;
   
-  return batimentos;
+  return velocidade;
 }
 
-int extrairTemperatura(long info) {
-  int temperatura = (info & 255);
+int extrairAltitude(long info) {
+  int altitude = (info & 255);
 
-  return temperatura;  
+  return altitude;  
 }
 
 void loop() {
+    
   // EMISSAO DE DADOS
   long info = lerSensoresRF(); 
   emitir(info);
-    
+
+  
   delay(1000);
   
   // RECEPCAO DE DADOS
@@ -162,23 +171,23 @@ void loop() {
       
     
       infoRF.movimento = extrairMovimento(info);
-      infoRF.batimentos = extrairBatimentos(info);
-      infoRF.temperatura = extrairTemperatura(info);
+      infoRF.velocidade = extrairVelocidade(info);
+      infoRF.altitude = extrairAltitude(info);
 
       enviarParaUSB();
    
-      int batimentos = extrairBatimentos(info);
-      Serial.print("O coracao de Avemarilson estah batendo a ");
-      Serial.print(batimentos);
-      Serial.println(" bpm");
+      int velocidade = extrairVelocidade(info);
+      Serial.print("O animal estah se movimento na velocidade de ");
+      Serial.print(velocidade);
+      Serial.println(" Km/h");
       
-      int temperatura = extrairTemperatura(info);
-      Serial.print("A temperatura de Avemarilson eh ");
-      Serial.print(temperatura);
-      Serial.println(" graus celsius");
+      int altitude = extrairAltitude(info);
+      Serial.print("A altitude do animal eh ");
+      Serial.print(altitude);
+      Serial.println(" metros");
 
       int movimento = extrairMovimento(info);
-      Serial.print("Avemarilson movimentou ");
+      Serial.print("O animal movimentou ");
       Serial.println(movimento);
       
     }
