@@ -16,7 +16,7 @@ public class FabricaConectores {
 			
 		} else if (Platform.isLinux()) {
 			comRF = (IComunicacaoRF) Native.loadLibrary(libPath
-					+ "\\pocoEscuro.so", IComunicacaoRF.class);
+					+ "/comunicacaorf.so", IComunicacaoRF.class);
 		}
 		return comRF;
 	}

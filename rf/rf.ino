@@ -152,7 +152,7 @@ void loop() {
   long info = lerSensoresRF(); 
   emitir(info);
     
-  delay(50);
+  delay(1000);
   
   // RECEPCAO DE DADOS
   info = receber();
