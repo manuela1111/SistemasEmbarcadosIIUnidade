@@ -39,11 +39,11 @@ public class SingleConector {
 		 for (int i =0; i<10; i++){
 			 comRF.ler();
 			 System.out.println("Dispensando leitura: "+
-			 comRF.getBatimentos() + "/ " + comRF.getTemperatura() + "/ " + comRF.getMovimento());
+			 comRF.getAltitude() + "/ " + comRF.getVelocidade() + "/ " + comRF.getMovimento());
 			 
 			 try {
 				 //50 pq o arduino esta com sleep de 50
-				Thread.sleep(50);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -59,9 +59,9 @@ public class SingleConector {
 			}
 			int resultado =comRF.ler();
 			if(resultado == 0){
-				info.setTemperatura(comRF.getTemperatura());
-				info.setBatimentos(comRF.getBatimentos());
-				info.setMovimentos(comRF.getMovimento());
+				info.setMovimento(comRF.getMovimento());
+				info.setVelocidade(comRF.getVelocidade());
+				info.setAltitude(comRF.getAltitude());
 			}
 			semaforo.release();
 			return resultado;
@@ -69,19 +69,20 @@ public class SingleConector {
 		
 		public static Informacao getInformacao(){
 			//Cria o semaforo e seta todas as informacoes
-			Informacao info = new Informacao();
+			Informacao info_ = new Informacao();
 			try {
 				semaforo.acquire();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			info.setBatimentos(info.getBatimentos());
-			info.setTemperatura(info.getTemperatura());
-			info.setMovimentos(info.getMovimentos());
+			info_.setMovimento(info.getMovimento());
+			info_.setVelocidade(info.getVelocidade());
+			info_.setAltitude(info.getAltitude());
+			
 			semaforo.release();
 			
-			return info;
+			return info_;
 		}
 		
 		public static void finalizar(){

@@ -26,7 +26,7 @@ public class monitor {
 
 	private MeterGaugeChartModel modeloMedidorBatimentos;
 	
-	//Sempre q ele criar uma instancia do monitor para usar na tela ele vai passar obrigatoriamente por esse método
+	//Sempre q ele criar uma instancia do monitor para usar na tela ele vai passar obrigatoriamente por esse mï¿½todo
 	@PostConstruct
 	public void iniciar(){
 		configurarMedidores();
@@ -71,23 +71,23 @@ public class monitor {
 	}
 
 	public boolean getMovimentoDetectado(){
-		return (SingleConector.getInformacao().getMovimentos()==1);
+		return (SingleConector.getInformacao().getMovimento()==1);
 	}
 	public void lerSensores() {
 		// acionar a temperatura do arduino
 		//SingleConector.getConector().ler();
 		Informacao info = SingleConector.getInformacao();
 
-		int temperatura = info.getTemperatura();
-		int batimentos = info.getBatimentos();
-
-		System.out.println("temperatura " + info.getTemperatura());
-		System.out.println("batimentos " + info.getBatimentos());
-		System.out.println("movimento " + info.getMovimentos());
+		int altitude = info.getAltitude();
+		int velocidade = info.getVelocidade();
+		
+		System.out.println("Altitude " + info.getAltitude());
+		System.out.println("Velocidade " + info.getVelocidade());
+		System.out.println("movimento " + info.getMovimento());
 		
 		//envia para o monitor .xhtml 
-		modeloMedidorTemperatura.setValue(temperatura);
-		modeloMedidorBatimentos.setValue(batimentos);
+		modeloMedidorTemperatura.setValue(altitude);
+		modeloMedidorBatimentos.setValue(velocidade);
 
 		// atualizar os valores nos medidores
 

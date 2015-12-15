@@ -1,26 +1,27 @@
 package br.edu.ifba.sispe.pocoescuro;
 
 public class Informacao {
-	private int batimentos;
-	private int movimentos;
-	private int temperatura;
+	private int movimento;
+	private int velocidade;
+	private int altitude;
 	
-	public int getBatimentos() {
-		return batimentos;
+	public int getMovimento() {
+		return movimento;
 	}
-	public void setBatimentos(int batimentos) {
-		this.batimentos = batimentos;
+	public void setMovimento(int movimento) {
+		this.movimento = movimento;
 	}
-	public int getMovimentos() {
-		return movimentos;
+	public int getVelocidade() {
+		return velocidade;
 	}
-	public void setMovimentos(int movimentos) {
-		this.movimentos = movimentos;
+	public void setVelocidade(int velocidade) {
+		this.velocidade = velocidade;
 	}
-	public int getTemperatura() {
-		return temperatura;
+	public int getAltitude() {
+		return altitude;
 	}
-	public void setTemperatura(int temperatura) {
-		this.temperatura = temperatura;
+	public void setAltitude(int altitude) {
+		this.altitude = altitude;
 	}
+	
 }

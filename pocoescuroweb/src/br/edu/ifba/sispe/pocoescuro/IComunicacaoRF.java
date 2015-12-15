@@ -10,9 +10,9 @@ public interface IComunicacaoRF extends Library {
 
 	public int getInt();
 
-	public int getBatimentos();
-
-	public int getTemperatura();
+	public int getVelocidade();
+	
+	public int getAltitude();
 
 	public int getMovimento();
 
