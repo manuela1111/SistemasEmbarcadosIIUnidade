@@ -21,14 +21,18 @@ Adafruit_BMP085 bmp;
 
 #define PINO_VELOCIDADE  0
 
-struct InfoRF{
+//Constante que representa o pino onde o positivo
+//do buzzer será ligado.
+const int buzzer = 6;
+
+struct InfoRF {
   int id;
   int movimento;
   int velocidade;
   int altitude;
-}infoRF;
+} infoRF;
 
- 
+
 void setup() {
   Serial.begin(9600);
 
@@ -36,7 +40,10 @@ void setup() {
     Serial.println("Não foi possível encontrar um sensor BMP085 válido.Por favor, verifique.");
     while (1) {}
   }
-  
+
+  //Definindo o pino buzzer como de saída.
+  pinMode(buzzer, OUTPUT);
+
   //Configuração do emissor receptor RF
   emissor.enableTransmit(RFID_PIN_TRANSMISSOR);
   receptor.enableReceive(0);
@@ -61,11 +68,11 @@ void setup() {
   acel.setTimeInactivity(10);//estava 10
 
   //Acionamento da detecção da atividade e inatividade
-  acel.setInterruptMapping(ADXL345_INT_ACTIVITY_BIT,ADXL345_INT1_PIN);
+  acel.setInterruptMapping(ADXL345_INT_ACTIVITY_BIT, ADXL345_INT1_PIN);
   acel.setInterruptMapping(ADXL345_INT_INACTIVITY_BIT, ADXL345_INT1_PIN);
 
-  acel.setInterrupt(ADXL345_INT_ACTIVITY_BIT,1);
-  acel.setInterrupt(ADXL345_INT_INACTIVITY_BIT,1);
+  acel.setInterrupt(ADXL345_INT_ACTIVITY_BIT, 1);
+  acel.setInterrupt(ADXL345_INT_INACTIVITY_BIT, 1);
 
 }
 //tirou os parâmetros pq já vai pegar direto dos sensores
@@ -75,41 +82,41 @@ long lerSensoresRF() {
   long velocidade = analogRead(PINO_VELOCIDADE);
   long altitude = bmp.readAltitude();
   long movimento = 0;
-  
+
 
   velocidade = map(velocidade, 0, 1023, 0, 100);
   //altitude = map(altitude, 0, 1023, 0, 40);
 
   byte interrupAcel = acel.getInterruptSource();
 
-  if (acel.triggered(interrupAcel,ADXL345_INT_ACTIVITY_BIT)){
-    movimento=1;
+  if (acel.triggered(interrupAcel, ADXL345_INT_ACTIVITY_BIT)) {
+    movimento = 1;
   }
-  
+
   long rf = RFID_LIMITE_INFERIOR;
   long info = rf << DESLOCAMENTO_RFID;
   info = info | (movimento << DESLOCAMENTO_MOVMT);
   info = info | (velocidade << DESLOCAMENTO_VELOC);
   info = info | altitude;
-  
-  return info;  
+
+  return info;
 }
 
 boolean RFIDValido(long info) {
   boolean valido = false;
-  
+
   infoRF.id = info >> DESLOCAMENTO_RFID;
-  if ((infoRF.id >= RFID_LIMITE_INFERIOR) && (infoRF.id <= RFID_LIMITE_SUPERIOR)){
-     valido = true; 
+  if ((infoRF.id >= RFID_LIMITE_INFERIOR) && (infoRF.id <= RFID_LIMITE_SUPERIOR)) {
+    valido = true;
   }
 
-  return valido;  
+  return valido;
 }
 
-void enviarParaUSB(){
-   //int tam = sizeof(dados);
+void enviarParaUSB() {
+  //int tam = sizeof(dados);
   char buff[sizeof(InfoRF)] = {0};
- 
+
   //char buff[tam];
 
   memcpy(&buff, &infoRF, sizeof(InfoRF));
@@ -117,70 +124,78 @@ void enviarParaUSB(){
   Serial.write("I");
   Serial.write((uint8_t*)&buff, sizeof(InfoRF));
   Serial.write("T");
-  
-  
+
+
 }
 void emitir(long info) {
-  emissor.send(info, 32);  
+  emissor.send(info, 32);
 }
 
 long receber() {
   long info = -1;
-  
+
   if (receptor.available()) {
     info = receptor.getReceivedValue();
-    
-    receptor.resetAvailable();    
+
+    receptor.resetAvailable();
   }
-  
+
   return info;
 }
 
 int extrairMovimento(long info) {
   int movimento = (info & 65536) >> DESLOCAMENTO_MOVMT;
-   
+
   return (movimento == 1);
 }
 
 int extrairVelocidade(long info) {
   int velocidade = (info & 65280) >> DESLOCAMENTO_VELOC;
-  
+
   return velocidade;
 }
 
 int extrairAltitude(long info) {
   int altitude = (info & 255);
 
-  return altitude;  
+  return altitude;
 }
 
+void ativaSom(){
+  tone(buzzer,1500);
+  }
+
+void desativaSom(){
+  noTone(buzzer);
+  }
+  
 void loop() {
-    
+
   // EMISSAO DE DADOS
-  long info = lerSensoresRF(); 
+  long info = lerSensoresRF();
   emitir(info);
 
-  
+
   delay(1000);
-  
+
   // RECEPCAO DE DADOS
   info = receber();
-  
+
   if (info != -1) {
     if (RFIDValido(info)) {
-      
-    
+
+      //ativaSom();
       infoRF.movimento = extrairMovimento(info);
       infoRF.velocidade = extrairVelocidade(info);
       infoRF.altitude = extrairAltitude(info);
 
       enviarParaUSB();
-   
+
       int velocidade = extrairVelocidade(info);
       Serial.print("O animal estah se movimento na velocidade de ");
       Serial.print(velocidade);
       Serial.println(" Km/h");
-      
+
       int altitude = extrairAltitude(info);
       Serial.print("A altitude do animal eh ");
       Serial.print(altitude);
@@ -189,9 +204,11 @@ void loop() {
       int movimento = extrairMovimento(info);
       Serial.print("O animal movimentou ");
       Serial.println(movimento);
-      
+
     }
-  }
+  }else{
+    //desativaSom();
+    }
 }
 
 
