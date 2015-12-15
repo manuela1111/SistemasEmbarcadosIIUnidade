@@ -9,10 +9,13 @@
 #include <comunicacao.h>
 #include <Extern.h>
 
+#include <stdlib.h>
+using namespace std;
+
 struct InfoRF {
-	short id; //o int do arduino é short
-	short batimentos;
-	short temperatura;
+	short id; //o int do arduino ï¿½ short
+	short velocidade;
+	short altitude;
 	short movimento;
 } infoRF;
 
@@ -38,11 +41,11 @@ int ler() {
 			//se a leitura da altitude correr bem
 			resultado = com.ler((char*) &at, sizeof(at));
 			if (resultado == EXIT_SUCCESS && (at == 'T')) {
-				//não precisa mais do cout que quem vai imprimir é o java
-				//cout << "id = " << info.id << endl;
-				//cout << "temp = " << info.temperatura << endl;
-				//cout << "batm = " << info.batimentos << endl;
-				//cout << "movimento = " << info.movimento << endl;
+				//nï¿½o precisa mais do cout que quem vai imprimir ï¿½ o java
+				/*cout << "id = " << infoRF.id << endl;
+				cout << "Veloc = " << infoRF.velocidade << endl;
+				cout << "Altitude = " << infoRF.altitude << endl;
+				cout << "movimento = " << infoRF.movimento << endl;*/
 				resultado = EXIT_SUCCESS;
 			}
 		}
@@ -52,11 +55,11 @@ int ler() {
 int getInt() {
 	return infoRF.id;
 }
-int getBatimentos() {
-	return infoRF.batimentos;
+int getVelocidade() {
+	return infoRF.velocidade;
 }
-int getTemperatura() {
-	return infoRF.temperatura;
+int getAltitude() {
+	return infoRF.altitude;
 }
 int getMovimento() {
 	return infoRF.movimento;

@@ -14,8 +14,8 @@ extern "C" {
 int iniciar (char*porta);
 int ler ();
 int getInt();
-int getBatimentos();
-int getTemperatura();
+int getVelocidade();
+int getAltitude();
 int getMovimento();
 int finalizar();
 
