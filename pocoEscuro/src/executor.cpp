@@ -14,10 +14,10 @@ using namespace std;
 
 struct InfoRF {
 	short id; //o int do arduino � short
+	short movimento;
 	short velocidade;
 	short altitude;
-	short movimento;
-} infoRF;
+};
 
 int main(char **argv, int argc) {
 
@@ -58,14 +58,10 @@ int main(char **argv, int argc) {
 				//se a leitura da altitude correr bem
 				resultado = com.ler((char*) &at, sizeof(at));
 				if (resultado == EXIT_SUCCESS && (at == 'T')) {
-				/*	cout << "id = " << info.id << endl;
-					cout << "temp = " << info.temperatura << endl;
-					cout << "batm = " << info.batimentos << endl;
-					cout << "movimento = " << info.movimento << endl;*/
-					cout << "id = " << infoRF.id << endl;
-									cout << "Veloc = " << infoRF.velocidade << endl;
-									cout << "Altitude = " << infoRF.altitude << endl;
-									cout << "movimento = " << infoRF.movimento << endl;
+					cout << "id = " << info.id << endl;
+					cout << "velocidade = " << info.velocidade << endl;
+					cout << "altitude = " << info.altitude << endl;
+					cout << "movimento = " << info.movimento << endl;
 				}
 			}
 		}

@@ -14,9 +14,9 @@ using namespace std;
 
 struct InfoRF {
 	short id; //o int do arduino � short
+	short movimento;
 	short velocidade;
 	short altitude;
-	short movimento;
 } infoRF;
 
 Comunicacao com = NULL;
@@ -32,7 +32,7 @@ int ler() {
 	char ai, at;
 	int resultado;
 	//int resultado = EXIT_FAILURE;
-	resultado = com.ler((char*)&ai, sizeof(ai));
+	resultado = com.ler((char*) &ai, sizeof(ai));
 	if ((resultado == EXIT_SUCCESS) && (ai == 'I')) {
 		//se a leitura de 'A' correr bem
 		//ler a altitude
@@ -43,9 +43,9 @@ int ler() {
 			if (resultado == EXIT_SUCCESS && (at == 'T')) {
 				//n�o precisa mais do cout que quem vai imprimir � o java
 				/*cout << "id = " << infoRF.id << endl;
-				cout << "Veloc = " << infoRF.velocidade << endl;
-				cout << "Altitude = " << infoRF.altitude << endl;
-				cout << "movimento = " << infoRF.movimento << endl;*/
+				 cout << "Veloc = " << infoRF.velocidade << endl;
+				 cout << "Altitude = " << infoRF.altitude << endl;
+				 cout << "movimento = " << infoRF.movimento << endl;*/
 				resultado = EXIT_SUCCESS;
 			}
 		}
