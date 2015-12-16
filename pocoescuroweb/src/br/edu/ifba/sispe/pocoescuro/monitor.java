@@ -37,8 +37,8 @@ public class monitor implements Serializable {
 		graficoAnimal.setTitle("Animais");
 		graficoAnimal.setLegendPosition("e");
 		Axis yAxis = graficoAnimal.getAxis(AxisType.Y);
-		yAxis.setMin(0);
-		yAxis.setMax(1000);
+		yAxis.setMin(800);
+		yAxis.setMax(1100);
 	}
 
 	private LineChartModel initGraficoAnimal() {
@@ -59,7 +59,7 @@ public class monitor implements Serializable {
 		LineChartSeries series2 = new LineChartSeries();
 		series2.setLabel("Animal 2");
 		series2.set(20,900);
-		series2.set(30, 800);
+		series2.set(30, 810);
 		series2.set(10, 850);
 		series2.set(35, 910);
 		series2.set(40, 950);
