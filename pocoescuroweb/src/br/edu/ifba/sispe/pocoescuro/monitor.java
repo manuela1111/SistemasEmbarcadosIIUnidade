@@ -17,9 +17,11 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
 import br.edu.ifba.sispe.pocoescuro.conector.SingleConector;
 
 @ManagedBean(name = "monitor")
-public class monitor implements Serializable{
+public class monitor implements Serializable {
 
 	private LineChartModel graficoAnimal;
+
+	private static ArrayList<Informacao> historico = new ArrayList<Informacao>();
 
 	public LineChartModel getGraficoAnimal() {
 		return graficoAnimal;
@@ -32,33 +34,40 @@ public class monitor implements Serializable{
 
 	private void configurarMedidores() {
 		graficoAnimal = initGraficoAnimal();
-        graficoAnimal.setTitle("Mico Leão Dourado");
-        graficoAnimal.setLegendPosition("e");
-        Axis yAxis = graficoAnimal.getAxis(AxisType.Y);
-        yAxis.setMin(0);
-        yAxis.setMax(1000);
+		graficoAnimal.setTitle("Animais");
+		graficoAnimal.setLegendPosition("e");
+		Axis yAxis = graficoAnimal.getAxis(AxisType.Y);
+		yAxis.setMin(0);
+		yAxis.setMax(1000);
 	}
 
 	private LineChartModel initGraficoAnimal() {
 		LineChartModel model = new LineChartModel();
- 
-		Informacao info = SingleConector.getInformacao();
+
+		LineChartSeries series1 = new LineChartSeries();
+		series1.setLabel("Animal 1");
+
+		if (!historico.isEmpty()) {
+			for (Informacao informacao : historico) {
+				series1.set(informacao.getVelocidade(),
+						informacao.getAltitude());
+			}
+		}else{
+			series1.set(0, 0);
+		}
+
+		LineChartSeries series2 = new LineChartSeries();
+		series2.setLabel("Animal 2");
+		series2.set(20,900);
+		series2.set(30, 800);
+		series2.set(10, 850);
+		series2.set(35, 910);
+		series2.set(40, 950);
 		
-        LineChartSeries series1 = new LineChartSeries();
-        series1.setLabel("Series 1");
- 
-        series1.set(info.getVelocidade(), info.getAltitude());
-        series1.set(2, 1);
-        series1.set(3, 3);
-        series1.set(4, 6);
-        series1.set(5, 8);
- 
-        
-        model.addSeries(series1);
-        
-         
-        return model;
-    }
+		model.addSeries(series1);
+		model.addSeries(series2);
+		return model;
+	}
 
 	public boolean getMovimentoDetectado() {
 		return (SingleConector.getInformacao().getMovimento() == 1);
@@ -75,6 +84,12 @@ public class monitor implements Serializable{
 		System.out.println("Altitude " + info.getAltitude());
 		System.out.println("Velocidade " + info.getVelocidade());
 		System.out.println("movimento " + info.getMovimento());
-		
+
+		if (info.getMovimento() == 1) {
+			historico.add(info);
+			System.out.println("vel:" + info.getVelocidade());
+			System.out.println("Alt:" + info.getAltitude());
+		}
+
 	}
 }
