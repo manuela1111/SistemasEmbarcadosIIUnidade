@@ -10,7 +10,10 @@
 
 <h:body>
 	<h:form id="formMonitor">
-		<p:chart type="line" model="#{monitor.graficoAnimal}" style="height:300px;" responsive="true"/>
+		<p:chart id="historicoAnimal" type="line" model="#{monitor.graficoAnimal}" style="height:300px;" responsive="true"/>
+		
+		<p:poll interval="1" listener="#{monitor.lerSensores}" 
+		update="formMonitor:historicoAnimal"/>
 	
 	</h:form>
 </h:body>
