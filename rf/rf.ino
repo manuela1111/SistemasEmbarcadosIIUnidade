@@ -12,12 +12,14 @@ ADXL345 acel = ADXL345();
 Adafruit_BMP085 bmp;
 
 #define RFID_PIN_TRANSMISSOR 4
-#define RFID_PIN_RECEPTOR 2
-#define RFID_LIMITE_INFERIOR 12345
-#define RFID_LIMITE_SUPERIOR 12355
-#define DESLOCAMENTO_RFID  17
-#define DESLOCAMENTO_MOVMT 16
-#define DESLOCAMENTO_VELOC 8
+#define RFID_PIN_RECEPTOR 0
+#define RFID_LIMITE_INFERIOR 10
+#define RFID_LIMITE_SUPERIOR 20
+
+#define DESLOCAMENTO_RFID  26
+#define DESLOCAMENTO_MOVMT 18
+#define DESLOCAMENTO_VELOC 10
+//altitude
 
 #define PINO_VELOCIDADE  0
 
@@ -38,7 +40,7 @@ void setup() {
 
   if (!bmp.begin()) {
     Serial.println("Não foi possível encontrar um sensor BMP085 válido.Por favor, verifique.");
-    while (1) {}
+    //while (1) {}
   }
 
   //Definindo o pino buzzer como de saída.
@@ -93,8 +95,8 @@ long lerSensoresRF() {
     movimento = 1;
   }
 
-  long rf = RFID_LIMITE_INFERIOR;
-  long info = rf << DESLOCAMENTO_RFID;
+  long id = RFID_LIMITE_INFERIOR;
+  long info = id << DESLOCAMENTO_RFID;
   info = info | (movimento << DESLOCAMENTO_MOVMT);
   info = info | (velocidade << DESLOCAMENTO_VELOC);
   info = info | altitude;
@@ -102,12 +104,12 @@ long lerSensoresRF() {
   return info;
 }
 
-boolean RFIDValido(long info) {
-  boolean valido = false;
+int RFIDValido(long info) {
+  int valido = 0;
 
   infoRF.id = info >> DESLOCAMENTO_RFID;
   if ((infoRF.id >= RFID_LIMITE_INFERIOR) && (infoRF.id <= RFID_LIMITE_SUPERIOR)) {
-    valido = true;
+    valido = 1;
   }
 
   return valido;
@@ -144,19 +146,19 @@ long receber() {
 }
 
 int extrairMovimento(long info) {
-  int movimento = (info & 65536) >> DESLOCAMENTO_MOVMT;
+  int movimento = (info & 67108863) >> DESLOCAMENTO_MOVMT;
 
   return (movimento == 1);
 }
 
 int extrairVelocidade(long info) {
-  int velocidade = (info & 65280) >> DESLOCAMENTO_VELOC;
+  int velocidade = (info & 262143) >> DESLOCAMENTO_VELOC;
 
   return velocidade;
 }
 
 int extrairAltitude(long info) {
-  int altitude = (info & 255);
+  int altitude = (info & 1023);
 
   return altitude;
 }
