@@ -59,7 +59,7 @@ int Comunicacao::iniciar(){
 	}
 #endif
 
-	Sleep(2000);//estava 2000
+	Sleep(1000);//estava 2000
 
 	return resultado;
 }
