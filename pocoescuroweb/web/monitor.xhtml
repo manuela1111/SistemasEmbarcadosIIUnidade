@@ -10,21 +10,8 @@
 
 <h:body>
 	<h:form id="formMonitor">
-		<p:chart id="medidorTemperatura" type="metergauge"
-		 	model="#{monitor.modeloMedidorTemperatura}"
-		 	style="width:400px;heigth:250px;"/>
-		<p:chart id="medidorBatimentos" type="metergauge"
-			model="#{monitor.modeloMedidorBatimentos}"
-			style="width:400px;heigth:250px;"/>
-		
-		<p:outputLabel
-			id="avisoMovimento" 
-			value="Movimento = #{monitor.movimentoDetectado}"></p:outputLabel>
-			
-		<p:poll interval="1" listener="#{monitor.lerSensores}" 
-		update="formMonitor:medidorTemperatura,
-			formMonitor:medidorBatimentos,
-			formMonitor:avisoMovimento"/>
+		<p:chart type="line" model="#{monitor.graficoAnimal}" style="height:300px;" responsive="true"/>
+	
 	</h:form>
 </h:body>
 </html>

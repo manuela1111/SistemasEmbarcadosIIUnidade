@@ -1,95 +1,86 @@
 package br.edu.ifba.sispe.pocoescuro;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.MeterGaugeChartModel;
 
 import br.edu.ifba.sispe.pocoescuro.conector.SingleConector;
 
 @ManagedBean(name = "monitor")
-public class monitor {
+public class monitor implements Serializable{
 
-	// vamos configurar o medidor para identificar o valor final, inicial,
-	// temperatura do componente da interface
-	private MeterGaugeChartModel modeloMedidorTemperatura;
-	public MeterGaugeChartModel getModeloMedidorTemperatura() {
-		return modeloMedidorTemperatura;
+	private LineChartModel graficoAnimal;
+
+	public LineChartModel getGraficoAnimal() {
+		return graficoAnimal;
 	}
 
-	public MeterGaugeChartModel getModeloMedidorBatimentos() {
-		return modeloMedidorBatimentos;
-	}
-
-	private MeterGaugeChartModel modeloMedidorBatimentos;
-	
-	//Sempre q ele criar uma instancia do monitor para usar na tela ele vai passar obrigatoriamente por esse m�todo
 	@PostConstruct
-	public void iniciar(){
+	public void iniciar() {
 		configurarMedidores();
-		
-	}
-	
-	private void configurarMedidores(){
-		modeloMedidorTemperatura = criarModeloTemperatura();
-		modeloMedidorTemperatura.setTitle("Temperatura");
-		modeloMedidorTemperatura.setGaugeLabel("Graus Celsius");
-		modeloMedidorBatimentos = criarModeloBatimentos();
-		modeloMedidorBatimentos.setTitle("Batimentos");
-		modeloMedidorBatimentos.setGaugeLabel("BPM");
-	}
-	
-	private MeterGaugeChartModel
-	criarModeloTemperatura(){
-		List<Number> marcadores = new ArrayList<Number>();
-		marcadores.add(0);
-		marcadores.add(10);
-		marcadores.add(20);
-		marcadores.add(30);
-		marcadores.add(40);
-		marcadores.add(50);
-		
-		return new MeterGaugeChartModel(0,marcadores);
-	}
-	
-	private MeterGaugeChartModel
-	criarModeloBatimentos(){
-		List<Number> marcadores = new ArrayList<Number>();
-		marcadores.add(0);
-		marcadores.add(50);
-		marcadores.add(75);
-		marcadores.add(100);
-		marcadores.add(125);
-		marcadores.add(150);
-		marcadores.add(175);
-		marcadores.add(200);
-		
-		return new MeterGaugeChartModel(0,marcadores);
 	}
 
-	public boolean getMovimentoDetectado(){
-		return (SingleConector.getInformacao().getMovimento()==1);
+	private void configurarMedidores() {
+		graficoAnimal = initGraficoAnimal();
+        graficoAnimal.setTitle("Mico Leão Dourado");
+        graficoAnimal.setLegendPosition("e");
+        Axis yAxis = graficoAnimal.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+        yAxis.setMax(10);
 	}
+
+	private LineChartModel initGraficoAnimal() {
+		LineChartModel model = new LineChartModel();
+ 
+        LineChartSeries series1 = new LineChartSeries();
+        series1.setLabel("Series 1");
+ 
+        series1.set(1, 2);
+        series1.set(2, 1);
+        series1.set(3, 3);
+        series1.set(4, 6);
+        series1.set(5, 8);
+ 
+        LineChartSeries series2 = new LineChartSeries();
+        series2.setLabel("Series 2");
+ 
+        series2.set(1, 6);
+        series2.set(2, 3);
+        series2.set(3, 2);
+        series2.set(4, 7);
+        series2.set(5, 9);
+ 
+        model.addSeries(series1);
+        model.addSeries(series2);
+         
+        return model;
+    }
+
+	public boolean getMovimentoDetectado() {
+		return (SingleConector.getInformacao().getMovimento() == 1);
+	}
+
 	public void lerSensores() {
 		// acionar a temperatura do arduino
-		//SingleConector.getConector().ler();
+		// SingleConector.getConector().ler();
 		Informacao info = SingleConector.getInformacao();
 
 		int altitude = info.getAltitude();
 		int velocidade = info.getVelocidade();
-		
+
 		System.out.println("Altitude " + info.getAltitude());
 		System.out.println("Velocidade " + info.getVelocidade());
 		System.out.println("movimento " + info.getMovimento());
 		
-		//envia para o monitor .xhtml 
-		modeloMedidorTemperatura.setValue(altitude);
-		modeloMedidorBatimentos.setValue(velocidade);
-
-		// atualizar os valores nos medidores
-
 	}
 }
