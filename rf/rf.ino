@@ -193,7 +193,7 @@ void loop() {
 
       enviarParaUSB();
 
-      int velocidade = extrairVelocidade(info);
+     /* int velocidade = extrairVelocidade(info);
       Serial.print("O animal estah se movimento na velocidade de ");
       Serial.print(velocidade);
       Serial.println(" Km/h");
@@ -205,7 +205,7 @@ void loop() {
 
       int movimento = extrairMovimento(info);
       Serial.print("O animal movimentou ");
-      Serial.println(movimento);
+      Serial.println(movimento);*/
 
     }
   }else{
